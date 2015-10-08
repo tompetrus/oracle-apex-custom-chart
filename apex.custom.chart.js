@@ -139,9 +139,6 @@ if ( apex.custom === undefined ) {
         var _refresh = function(pDefaults){
           var lDataPromise;
           
-           // set loading caused exception errors.
-          //lChart.setLoading("");
-          
           apex.debug("refresh chart");
           lTarget$.trigger("apexbeforerefresh");
 
@@ -192,9 +189,6 @@ if ( apex.custom === undefined ) {
           // bind to the apexrefresh event and closure the defaults
           lTarget$.on("apexrefresh", function(){ _refresh(lDefaults); }).trigger("apexrefresh");
         });
-        
-        // changed location above de faults promise.
-        //lChart.write( lTarget$[0] );
         
         gAllCharts.push({"id":lTarget$.attr("id"),"chartObject":lChart});
         
