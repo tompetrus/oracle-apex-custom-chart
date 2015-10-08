@@ -138,7 +138,6 @@ if ( apex.custom === undefined ) {
         // set up the refresh function
         var _refresh = function(pDefaults){
           var lDataPromise;
-          lChart.setLoading("");
           
           apex.debug("refresh chart");
           lTarget$.trigger("apexbeforerefresh");
@@ -171,6 +170,9 @@ if ( apex.custom === undefined ) {
           });
         };
         
+        // new location is before data is called for
+        lChart.write( lTarget$[0] );
+
         // retrieve the defaults. Note that the defaultsLocation param could be a url etc, it doesn't have to be a file location
         // TODO: make this a function callback
         var lDefaultsPromise;
@@ -179,7 +181,7 @@ if ( apex.custom === undefined ) {
         } else if ( $.type(pOptions.ajax.defaults) === "object" && $.type(pOptions.ajax.defaults) === "object" ) {
           lDefaultsPromise = $.ajax(pOptions.ajax.defaults);
         };
-        
+
         lDefaultsPromise.done(function(pDefaults){
           lDefaults = pDefaults;
           apex.debug("defaults fetched: ");
@@ -187,8 +189,6 @@ if ( apex.custom === undefined ) {
           // bind to the apexrefresh event and closure the defaults
           lTarget$.on("apexrefresh", function(){ _refresh(lDefaults); }).trigger("apexrefresh");
         });
-        
-        lChart.write( lTarget$[0] );
         
         gAllCharts.push({"id":lTarget$.attr("id"),"chartObject":lChart});
         
