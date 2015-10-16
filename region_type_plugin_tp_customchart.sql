@@ -283,13 +283,23 @@ wwv_flow_api.create_plugin (
 'BEGIN'||unistr('\000a')||
 '  CASE l_request'||unistr('\000a')||
 '  WHEN ''DEFAULTS'' THEN'||unistr('\000a')||
-'    /* VANROTH Added extra defaults values. Attribute 08 and 09 are extra textareas */'||unistr('\000a')||
-'    l_defaults := l_defaults || l_defaults2;'||unistr('\000a')||
-'    l_defaults := l_defaults || l_defaults3;'||unistr('\000a')||
+'    -- PEETEBA: replace item substitutions'||unistr('\000a')||
+'    l_defaults := APEX_PLUGIN_UTIL.replace_substitutions('||unistr('\000a')||
+'        p_value => l_defaults'||unistr('\000a')||
+'      );'||unistr('\000a')||
+'      '||unistr('\000a')||
+'    -- VANROTH Added extra defaults values. Attribute 08 and 09'||
+' are extra textareas'||unistr('\000a')||
+'    l_defaults := l_defaults || APEX_PLUGIN_UTIL.replace_substitutions('||unistr('\000a')||
+'                                    p_value => l_defaults2'||unistr('\000a')||
+'                                  );'||unistr('\000a')||
+'    l_defaults := l_defaults || APEX_PLUGIN_UTIL.replace_substitutions('||unistr('\000a')||
+'                                    p_value => l_defaults3'||unistr('\000a')||
+'                                  );'||unistr('\000a')||
 ''||unistr('\000a')||
 '    output_clob(l_defaults);'||unistr('\000a')||
-'  W'||
-'HEN ''DATA'' THEN'||unistr('\000a')||
+'  WHEN ''DATA'''||
+' THEN'||unistr('\000a')||
 '    l_column_value_list :='||unistr('\000a')||
 '      apex_plugin_util.get_data2 ('||unistr('\000a')||
 '          p_sql_statement    => l_sql,'||unistr('\000a')||
@@ -300,8 +310,8 @@ wwv_flow_api.create_plugin (
 '          p_max_rows         => 1);'||unistr('\000a')||
 '    -- only 1 record is expected.'||unistr('\000a')||
 '    IF l_column_value_list.exists(1)'||unistr('\000a')||
-'      AND l_column_value'||
-'_list(1).value_list.exists(1)'||unistr('\000a')||
+'      AND l_column_value_list(1).v'||
+'alue_list.exists(1)'||unistr('\000a')||
 '    THEN'||unistr('\000a')||
 '      l_chart_xml := l_column_value_list(1).value_list(1).clob_value;'||unistr('\000a')||
 '      output_clob( l_chart_xml );'||unistr('\000a')||
